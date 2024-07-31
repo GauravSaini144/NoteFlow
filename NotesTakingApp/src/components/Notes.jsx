@@ -11,7 +11,7 @@ export default function Notes() {
     
   useEffect(()=>{
     const getNotes=JSON.parse(localStorage.getItem('notes'));
-    if(getNotes.length==0){
+    if(getNotes==null){
       
     }else{
     setNotes(getNotes);}
@@ -40,9 +40,9 @@ export default function Notes() {
    
   const HandleSubmit=(event)=>{
     event.preventDefault();
-    console.log(data);
+    
     setNotes((prevNote)=>[...prevNote,data]); 
-    // console.log(notes);
+  
     setData({title:"", note:"", date:""})
   }
 
@@ -78,7 +78,7 @@ export default function Notes() {
   }
   const HandleEditForm=(event)=>{
     event.preventDefault();
-    console.log(data);
+    
     const newArr=notes.map((note)=>{
       if(note.id===data.id){
         note.title= data.title;
@@ -144,12 +144,9 @@ export default function Notes() {
       })
         }</div>
 
-        {/* You can open the modal using document.getElementById('ID').showModal() method */}
-
 <dialog id="my_modal_3" className="modal">
   <div className="modal-box">
     <form method="dialog">
-      {/* if there is a button in form, it will close the modal */}
       <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={ModalClose}>✕</button>
     </form>
     <h3 className="font-bold text-lg my-2">Edit here</h3>
