@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import {nanoid} from "nanoid";
 import "./Note.css"
+import toast from 'react-hot-toast';
 export default function Notes() {
   
   const [notes, setNotes]=useState([]);
@@ -40,14 +41,20 @@ export default function Notes() {
    
   const HandleSubmit=(event)=>{
     event.preventDefault();
-    
+
+    if(data.title.length===0 || data.note.length===0){
+      toast.error("Please fill the fields");
+    }else{
+   
     setNotes((prevNote)=>[...prevNote,data]); 
-  
+    toast.success("Added Successfully");
     setData({title:"", note:"", date:""})
-  }
+    }
+}
 
   const DeleteNote=(id)=>{
     const newNotes=notes.filter((note)=> note.id!=id);
+    toast.success("removed")
     setNotes(newNotes);
   }
 
@@ -79,6 +86,11 @@ export default function Notes() {
   const HandleEditForm=(event)=>{
     event.preventDefault();
     
+     
+    if(data.title.length===0 || data.note.length===0){
+      toast.error("Please fill the fields");
+    }else{
+     
     const newArr=notes.map((note)=>{
       if(note.id===data.id){
         note.title= data.title;
@@ -94,11 +106,13 @@ export default function Notes() {
       }
 
     });
+    toast.success("Updated");
     setNotes(newArr);
     setData({id :"", title:"", note:"", date:"", edit:""});
     document.getElementById('my_modal_3').close();
-
   }
+  }
+  
 
   const ModalClose=()=>{
     setData({id :"", title:"", note:"", date:"", edit:""});
@@ -108,9 +122,9 @@ export default function Notes() {
     <> <div className='max-w-screen-2xl mx-5 my-10'>
        <form onSubmit={HandleSubmit} className='flex flex-col space-y-6 center'>
     
-      <input type="text" className="input input-bordered input-accent w-full max-w-xs" placeholder='Title' name='title' id='title' value={data.title} onChange={HandleChange} required />
+      <input type="text" className="input input-bordered input-accent w-full max-w-xs" placeholder='Title' name='title' id='title' value={data.title} onChange={HandleChange} />
       <div className='lg:flex lg:flex-row md:flex-col'>
-      <textarea className="textarea textarea-accent m-auto w-full " placeholder='Note' name="note" id="note" value={data.note} onChange={HandleChange} required ></textarea>
+      <textarea className="textarea textarea-accent m-auto w-full " placeholder='Note' name="note" id="note" value={data.note} onChange={HandleChange} ></textarea>
       <button className='lg:mx-2 btn text-white m-auto  text-lg' id='button' style={{width:"30%",height:"70px"}}>Add</button>
       </div>
      </form>
@@ -151,14 +165,14 @@ export default function Notes() {
     </form>
     <h3 className="font-bold text-lg my-2">Edit here</h3>
     <form onSubmit={HandleEditForm} className='space-y-4' >
-        <input type="text" className='input input-bordered input-accent w-full max-w-xs' placeholder='title'  value={data.title} name="title" onChange={HandleUpdate} />
-        <textarea type="text" className='textarea textarea-accent m-auto w-full' placeholder='note' name='note' value={data.note} onChange={HandleUpdate}/>
+        <input type="text" className='input input-bordered input-accent w-full max-w-xs' placeholder='title'  value={data.title} name="title" onChange={HandleUpdate}/>
+        <textarea type="text" className='textarea textarea-accent m-auto w-full' placeholder='note' name='note' value={data.note} onChange={HandleUpdate} />
         <button className='btn bg-slate-700 text-white border-none hover:bg-slate-600'>Done</button>
     </form>
     
   </div>
 </dialog>
         
-    </>
+   </>
   )
 }
